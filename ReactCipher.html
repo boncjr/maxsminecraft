@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ReactCipher Loader</title>
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #0b1020;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: monospace;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* Loading Screen */
+#loading {
+  position: absolute;
+  inset: 0;
+  background: #222;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  transition: opacity 0.8s ease;
+  gap: 16px;
+}
+
+#loading h1 {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Fancy Loader */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  color: #398EB6;
+  position: relative;
+  animation: l40 .5s infinite alternate;
+}
+
+.loader:before,
+.loader:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: 25px 25px;
+  background-position: 0 0,100% 0,100% 100%,0 100%;
+  background-repeat: no-repeat;
+}
+
+.loader:before {
+  background-image:
+    radial-gradient(farthest-side at top    left ,currentColor 96%,#0000),
+    radial-gradient(farthest-side at top    right,currentColor 96%,#0000),
+    radial-gradient(farthest-side at bottom right,currentColor 96%,#0000),
+    radial-gradient(farthest-side at bottom left ,currentColor 96%,#0000);
+  animation: l40-1 1s infinite;
+}
+
+.loader:after {
+  background-image: 
+    radial-gradient(farthest-side at top    left ,#0000 94%,currentColor 96%),
+    radial-gradient(farthest-side at top    right,#0000 94%,currentColor 96%),
+    radial-gradient(farthest-side at bottom right,#0000 94%,currentColor 96%),
+    radial-gradient(farthest-side at bottom left ,#0000 94%,currentColor 96%);
+  animation: l40-2 1s infinite;
+}
+
+@keyframes l40-1 {
+  0%,10%,90%,100% {inset:0}
+  40%,60% {inset:-10px}
+}
+
+@keyframes l40-2 {
+  0%,40%  {transform: rotate(0)}
+  60%,100%{transform: rotate(90deg)}
+}
+
+/* Cipher UI */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  opacity: 0;
+  transition: opacity 1s ease;
+  align-items: center;
+}
+
+textarea {
+  width: 420px;
+  height: 120px;
+  padding: 14px;
+  background: #111827;
+  color: #e5e7eb;
+  border-radius: 14px;
+  border: 2.75px solid #6bff; /* blue */
+  border-radius: 14px;        /* keeps corners rounded */
+  resize: none;
+  outline: none;
+  font-size: 14px;
+  position: relative;
+}
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loading">
+  <h1>ReactCipher Loading...</h1>
+  <div class="loader"></div>
+</div>
+
+<!-- Cipher UI -->
+<div class="container" id="cipherUI">
+  <textarea id="in" placeholder="input"></textarea>
+  <textarea id="out" placeholder="output" readonly></textarea>
+</div>
+
+<script>
+const A = "abcdefghijklmnopqrstuvwxyz";
+
+function affine(t,a=5,b=8){
+  return t.toLowerCase().replace(/[a-z]/g,c=>{
+    let x=A.indexOf(c);
+    return A[(a*x+b)%26];
+  });
+}
+
+function caesar(t,s=5){
+  return t.replace(/[a-z]/g,c=>A[(A.indexOf(c)+s)%26]);
+}
+
+function vigenere(t,k){
+  let o="",j=0;
+  for(let c of t){
+    if(/[a-z]/.test(c)){
+      o+=A[(A.indexOf(c)+A.indexOf(k[j%k.length]))%26]; 
+      j++;
+    } else o+=c;
+  }
+  return o;
+}
+
+function textToNumbers(t){
+  return t.replace(/[a-z]/g,c=>A.indexOf(c)+1).split("").join(" ");
+}
+
+const input = document.getElementById("in");
+const out = document.getElementById("out");
+
+input.addEventListener("input", e => {
+  let text = e.target.value;
+  let key = A[(text.length || 1) % 26].repeat(5);
+  out.value = textToNumbers(vigenere(caesar(affine(text)), key));
+});
+
+// Fade loader and show UI after 5s
+setTimeout(()=>{
+  document.getElementById("loading").style.opacity = 0;
+  setTimeout(()=>document.getElementById("loading").style.display="none", 800);
+  document.getElementById("cipherUI").style.opacity = 1;
+}, 5000);
+</script>
+
+</body>
+</html>
