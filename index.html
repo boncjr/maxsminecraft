@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Max's Minecraft Cipher</title>
+<title>ReactCipher Loader</title>
 <style>
 html, body {
   height: 100%;
@@ -16,7 +16,7 @@ html, body {
   color: #fff;
 }
 
-/* Loading Screen */
+/* Loader */
 #loading {
   position: absolute;
   inset: 0;
@@ -99,13 +99,49 @@ textarea {
   padding: 14px;
   background: #111827;
   color: #e5e7eb;
+  border: 2.75px solid #6bff;
   border-radius: 14px;
-  border: 2.75px solid #6bff; /* blue */
-  border-radius: 14px;        /* keeps corners rounded */
   resize: none;
   outline: none;
   font-size: 14px;
   position: relative;
+}
+
+/* Help ? Button */
+#helpBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #398EB6;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff;
+  z-index: 15;
+}
+
+/* Side Panel */
+#sidePanel {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background: #1a1f36;
+  padding: 20px;
+  box-shadow: -2px 0 10px #0008;
+  transition: right 0.4s ease;
+  overflow-y: auto;
+  z-index: 14;
+}
+
+#sidePanel h2 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #6bf;
 }
 </style>
 </head>
@@ -115,6 +151,20 @@ textarea {
 <div id="loading">
   <h1>ReactCipher Loading...</h1>
   <div class="loader"></div>
+</div>
+
+<!-- Help button -->
+<button id="helpBtn">?</button>
+
+<!-- Side Panel -->
+<div id="sidePanel">
+  <h2>Cipher Sandwich</h2>
+  <ul>
+    <li>Affine Cipher</li>
+    <li>Caesar Cipher</li>
+    <li>Vigenère Cipher</li>
+    <li>Text to Numbers</li>
+  </ul>
 </div>
 
 <!-- Cipher UI -->
@@ -167,6 +217,16 @@ setTimeout(()=>{
   setTimeout(()=>document.getElementById("loading").style.display="none", 800);
   document.getElementById("cipherUI").style.opacity = 1;
 }, 5000);
+
+// Side panel toggle
+const helpBtn = document.getElementById("helpBtn");
+const sidePanel = document.getElementById("sidePanel");
+let panelOpen = false;
+
+helpBtn.addEventListener("click", ()=>{
+  panelOpen = !panelOpen;
+  sidePanel.style.right = panelOpen ? "0" : "-300px";
+});
 </script>
 
 </body>
