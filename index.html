@@ -3,84 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <title>BetterSchoolSMP</title>
+
 <style>
-  html, body {
-    height: 100%;
-    margin: 0;
-    background: #0b1020;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: monospace;
-    color: #ffffff;
-  }
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #0b1020;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: monospace;
+  color: #fff;
+}
 
-  .container {
-    display: flex;
-    gap: 40px;
-  }
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .card {
-    position: relative;
-    padding: 30px 40px;
-    border-radius: 14px;
-    background: rgba(15, 20, 45, 0.9);
-    box-shadow:
-      0 0 20px rgba(100, 180, 255, 0.6),
-      0 0 40px rgba(180, 100, 255, 0.4),
-      0 0 60px rgba(255, 100, 200, 0.3);
-    animation: glow 6s linear infinite;
-  }
+.container {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+}
 
-  @keyframes glow {
-    0% { box-shadow: 0 0 20px #6cf, 0 0 40px #b6f, 0 0 60px #f6c; }
-    50% { box-shadow: 0 0 25px #f6c, 0 0 45px #6cf, 0 0 65px #b6f; }
-    100% { box-shadow: 0 0 20px #6cf, 0 0 40px #b6f, 0 0 60px #f6c; }
-  }
+.card {
+  width: 320px;
+  height: 200px;
+  padding: 25px;
+  border-radius: 14px;
+  background: rgba(15, 20, 45, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  animation: glow 6s linear infinite;
+}
 
-  h2 {
-    margin-top: 0;
-    color: #9fd7ff;
-    text-align: center;
-  }
+@keyframes glow {
+  0%   { box-shadow: 0 0 20px #6cf, 0 0 40px #b6f, 0 0 60px #f6c; }
+  50%  { box-shadow: 0 0 25px #f6c, 0 0 45px #6cf, 0 0 65px #b6f; }
+  100% { box-shadow: 0 0 20px #6cf, 0 0 40px #b6f, 0 0 60px #f6c; }
+}
 
-  .info {
-    margin-top: 10px;
-    font-size: 1.05em;
-    text-align: center;
-  }
+h2 {
+  margin: 0 0 15px 0;
+  color: #9fd7ff;
+}
 
-  .label {
-    color: #ffb3ff;
-  }
+.label {
+  color: #ffb3ff;
+  margin-top: 10px;
+}
 
-  .value {
-    color: #b9e7ff;
-    user-select: all;
-  }
+.value {
+  color: #b9e7ff;
+  user-select: all;
+}
+
+#timer {
+  font-size: 1.05em;
+  text-align: center;
+  color: #ffffff;
+}
 </style>
 </head>
-<body>
 
-<div class="container">
-  <div class="card">
-    <h2>Java Edition</h2>
-    <div class="info">
+<body>
+<div class="wrapper">
+
+  <div class="container">
+    <div class="card">
+      <h2>Java Edition</h2>
       <div class="label">IP Address</div>
       <div class="value">betterschoolsmp.falixsrv.me</div>
     </div>
-  </div>
 
-  <div class="card">
-    <h2>Bedrock Edition</h2>
-    <div class="info">
+    <div class="card">
+      <h2>Bedrock Edition</h2>
       <div class="label">IP</div>
       <div class="value">195.201.153.149</div>
-      <div class="label" style="margin-top:10px;">Port</div>
+      <div class="label">Port</div>
       <div class="value">40971</div>
     </div>
   </div>
+
+  <div id="timer"></div>
+
 </div>
+
+<script>
+const launchTime = new Date("February 6, 2026 18:30:00");
+const onlineSince = new Date("February 6, 2026 18:30:00");
+
+function updateTimer() {
+  const now = new Date();
+  const timer = document.getElementById("timer");
+
+  if (now < launchTime) {
+    let diff = launchTime - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff %= (1000 * 60 * 60 * 24);
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    diff %= (1000 * 60 * 60);
+
+    const minutes = Math.floor(diff / (1000 * 60));
+
+    timer.textContent =
+      `${days} day${days !== 1 ? "s" : ""}, ` +
+      `${hours} hour${hours !== 1 ? "s" : ""}, ` +
+      `${minutes} minute${minutes !== 1 ? "s" : ""} until Friday, February 6 at 6:30 PM`;
+  } else {
+    let diff = now - onlineSince;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff %= (1000 * 60 * 60 * 24);
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    diff %= (1000 * 60 * 60);
+
+    const minutes = Math.floor(diff / (1000 * 60));
+
+    timer.textContent =
+      `Server online for ${days} day${days !== 1 ? "s" : ""}, ` +
+      `${hours} hour${hours !== 1 ? "s" : ""}, ` +
+      `${minutes} minute${minutes !== 1 ? "s" : ""} since Friday, February 6 at 6:30 PM`;
+  }
+}
+
+updateTimer();
+setInterval(updateTimer, 60000);
+</script>
 
 </body>
 </html>
