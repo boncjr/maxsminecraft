@@ -115,7 +115,7 @@ function updateTimer() {
     timer.textContent =
       `${days} day${days !== 1 ? "s" : ""}, ` +
       `${hours} hour${hours !== 1 ? "s" : ""}, ` +
-      `${minutes} minute${minutes !== 1 ? "s" : ""} Until Launch`;
+      `${minutes} minute${minutes !== 1 ? "s" : ""} until Friday, February 6 at 6:30 PM`;
   } else {
     let diff = now - onlineSince;
 
@@ -130,7 +130,7 @@ function updateTimer() {
     timer.textContent =
       `Server online for ${days} day${days !== 1 ? "s" : ""}, ` +
       `${hours} hour${hours !== 1 ? "s" : ""}, ` +
-      `${minutes} minute${minutes !== 1 ? "s" : ""} Since Launch`;
+      `${minutes} minute${minutes !== 1 ? "s" : ""} since Friday, February 6 at 6:30 PM`;
   }
 }
 
